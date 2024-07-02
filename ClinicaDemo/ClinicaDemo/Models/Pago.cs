@@ -3,9 +3,7 @@
     public class Pago
     {
         public int Id { get; set; }
-
-        public int IdCita { get; set; }
-        
+              
         public Cita? Cita { get; set; }
 
         public decimal Monto { get; set; }

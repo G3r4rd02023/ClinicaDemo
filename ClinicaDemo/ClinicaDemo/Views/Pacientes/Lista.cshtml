@@ -1,23 +1,19 @@
-﻿
+﻿@model IEnumerable<ClinicaDemo.Models.Paciente>
+
 @{
-    ViewData["Title"] = "Lista";
+    ViewData["Title"] = "Index";
 }
 
-@section Estilos {
-    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
-}
-
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@if (TempData["Confirmation"] != null)
+@if (TempData["AlertMessage"] != null)
 {
     <script>
-        $(function () {
+        document.addEventListener('DOMContentLoaded', function () {
             Swal.fire({
                 title: '¡Éxito!',
-                text: '@TempData["Confirmation"]',
+                text: '@TempData["AlertMessage"]',
                 icon: 'success',
                 confirmButtonText: 'Aceptar'
             });
@@ -25,87 +21,90 @@
     </script>
 }
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <script>
-        $(function () {
-            Swal.fire({
-                title: '¡Error!',
-                text: '@TempData["ErrorMessage"]',
-                icon: 'warning',
-                confirmButtonText: 'Aceptar'
-            });
-        });
-    </script>
-}
-
 <p>
-    <a onclick="showInPopup('@Url.Action("Create", "Pacientes", new { id = 0 })', '')"
-       class="btn btn-sm btn-primary text-white"><i class="fa fa-plus-circle"></i> Nuevo Paciente</a>
+    <a onclick="showInPopup('@Url.Action("Create", "Pacientes", new { id = 0 }, Context.Request.Scheme)' ,
+    '')" class="btn btn-sm btn-primary text-white"><i class="oi oi-plus"></i> Agregar un paciente</a>
 </p>
 
-<div class="col-md-12">
-    <div class="card">
-        <div class="card-header text-center">
-            <h5>Productos</h5>
+<div class=" col-md-12">
+    <div class=" card">
+        <div class=" card-header text-center text-secondary">
+            <h5>Lista de Pacientes</h5>
         </div>
-        <div class="card-body">
-            <table id="paciente" class="table table-hover table-responsive table-striped">
+        <div class=" card-body">
+            <table id="paciente" class="table table-hover table responsive table stripped">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Edad</th>
-                        <th scope="col">Telefono</th>
-                        <th scope="col">Direccion</th>
-                        <th>Acciones</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Direccion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Telefono)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark Ottp</td>
-                        <td>19</td>
-                        <td>2226-0202</td>
-                        <td>Calle 123 23 34</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob Thornton</td>
-                        <td>23</td>
-                        <td>3345-0293</td>
-                        <td>Calle 993 3893</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry Bird</td>
-                        <td>22</td>
-                        <td>3345-0233</td>
-                        <td>Calle 993 3193</td>
-                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-primary">
+                                <strong>
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </strong>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Direccion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Telefono)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                <a onclick="showInPopup('@Url.Action("Detalles", "Pacientes", new { id = item.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-success btn-sm"><i class="oi oi-book"></i> </a>
+                                <a onclick="showInPopup('@Url.Action("Edit", "Pacientes", new { id = item.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-warning btn-sm"><i class="oi oi-pencil"></i> </a>
+                                <button data-id="@item.Id" class="btn btn-outline-danger btn-sm deleteItem" data-bs-toggle="modal"
+                                        data-bs-target="#deleteDialog">
+                                    <i class="oi oi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
+
         </div>
     </div>
 </div>
+
 
 <partial name="_MostrarModal" />
 <partial name="_ModalEliminar" />
 
 @section Scripts {
 
-    <partial name="_ValidationScriptsPartial" />
-
     <script src="~/js/showmodal.js"></script>
+
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            $('#paciente').DataTable({
-                "language": {
-                    url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
-                },
-            });
+            $('#paciente').DataTable(
+                {
+                    "language": {
+                        url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                    },
+                });
         });
     </script>
 

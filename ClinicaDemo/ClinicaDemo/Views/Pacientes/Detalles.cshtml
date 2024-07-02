@@ -1,0 +1,44 @@
+﻿@model ClinicaDemo.Models.Paciente
+
+@{
+    ViewData["Title"] = "Detalles";
+    Layout = null;
+}
+
+<div class="card">
+    <div class="card-header text-center text-primary">
+        <h6>Historial Clínico</h6>
+    </div>
+    <div class="card-body">
+        <dl class="row">           
+            <dt class="col-sm-6">
+                Fecha de Consulta
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.HistorialClinico.FirstOrDefault().FechaConsulta)
+            </dd>
+            <dt class="col-sm-6">
+                Diagnostico
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.HistorialClinico.FirstOrDefault().Diagnostico)
+            </dd>
+            <dt class="col-sm-6">
+                Tratamiento
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.HistorialClinico.FirstOrDefault().Tratamiento)
+            </dd>
+            <dt class="col-sm-6">
+                Notas
+            </dt>
+            <dd class="col-sm-6">
+                @Html.DisplayFor(model => model.HistorialClinico.FirstOrDefault().Notas)
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer text-center">
+        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id"><i class="oi oi-pencil"></i></a>
+        <a class="btn btn-success" asp-action="Lista"><i class="oi oi-ban"></i></a>
+    </div>
+</div>

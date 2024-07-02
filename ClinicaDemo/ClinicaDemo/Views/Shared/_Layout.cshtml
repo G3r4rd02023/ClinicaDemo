@@ -3,35 +3,110 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - ClinicaDemo</title>
+    <title>@ViewData["Title"] - Biblioteca.Frontend</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/ClinicaDemo.styles.css" asp-append-version="true" />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+    <link rel="stylesheet" href="~/Biblioteca.Frontend.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/open-iconic/1.1.1/font/css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     @await RenderSectionAsync("Estilos", required: false)
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-light bg-info">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ClinicaDemo</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand text-light" href="#">Clinica Medica</a>
+                <button class="navbar-toggler text-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Pacientes" asp-action="Lista">Pacientes</a>
-                        </li>
-                    </ul>
+                <div class="offcanvas offcanvas-end bg-info" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title text-light" id="offcanvasNavbarLabel">Clinica Medica</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active text-light" asp-controller="Home" asp-action="Index">
+                                    <span class="oi oi-home"></span> Inicio
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light" asp-controller="Pacientes" asp-action="Lista">
+                                    <span class="oi oi-people"></span> Pacientes
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light" asp-controller="Historial" asp-action="Index">
+                                    <span class="oi oi-book"></span> Historial
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light" asp-controller="Citas" asp-action="Index">
+                                    <span class=" oi oi-calendar"></span> Citas
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active text-light" asp-controller="Ingresos" asp-action="Index">
+                                    <span class=" oi oi-dollar"></span> Ingresos
+                                </a>
+                            </li>
+                           
+                            @if (User.Identity!.IsAuthenticated && User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-light" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Menu
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
+                                        <li><a class="dropdown-item text-light" asp-controller="Pacientes" asp-action="Index">Libros</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Citas" asp-action="Index">Clientes</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Historial" asp-action="Index">Categorias</a></li>
+                                        <li><a class="dropdown-item text-light" asp-controller="Ingresos" asp-action="Index">Usuarios</a></li>
+                                        
+
+                                    </ul>
+                                </li>
+                            }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Lector"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Libros" asp-action="Index">Libros</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
+                                </li>
+                            }
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Bibliotecario"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Libros" asp-action="Index">Libros</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Categorias" asp-action="Index">Categorias</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Prestamos" asp-action="Index">Prestamos</a>
+                                </li>
+                            }
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuarios"
+                                       asp-action="Edit"><strong>Hola! @User.Identity.Name</strong></a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="CerrarSesion">Salir</a>
+                                </li>
+                            }
+                           @*  else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="IniciarSesion">
+                                        <span class=" oi oi-expand-right"></span> 
+                                    </a>
+                                </li>
+                            } *@
+
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -44,7 +119,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2024 - ClinicaDemo - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2024 - ByG - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

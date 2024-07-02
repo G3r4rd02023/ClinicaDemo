@@ -1,0 +1,67 @@
+﻿@model ClinicaDemo.Models.Paciente
+@{
+    ViewData["Title"] = "Create";
+    Layout = null;
+}
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header text-center text-primary">
+            <h6>Crear Paciente</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="row">
+                    <!-- Left Column -->
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <input asp-for="Nombre" class="form-control" placeholder="Nombre" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Apellidos" class="form-control" placeholder="Apellidos" />
+                            <span asp-validation-for="Apellidos" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Direccion" class="form-control" placeholder="Direccion" />
+                            <span asp-validation-for="Direccion" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Genero" class="form-control" placeholder="Genero" />
+                            <span asp-validation-for="Genero" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Telefono" class="form-control" placeholder="Telefono" />
+                            <span asp-validation-for="Telefono" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Email" class="form-control" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="col-md-4">
+                        <div class="form-group text-primary">
+                            <label>Fecha de Nacimiento</label>
+                            <input asp-for="FechaNacimiento" type="date" class="form-control" placeholder="Fecha de Nacimiento" />
+                            <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer text-center">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-circle-check"></i> Guardar</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+

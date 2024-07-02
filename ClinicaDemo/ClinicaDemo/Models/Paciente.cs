@@ -18,5 +18,9 @@
 
         public string Email { get; set; } = null!;
 
+        public string FullName => $"{Nombre} {Apellidos}";
+
+        public ICollection<HistorialClinico>? HistorialClinico { get; set; } 
+
     }
 }
