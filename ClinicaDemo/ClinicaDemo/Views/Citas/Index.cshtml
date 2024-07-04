@@ -1,0 +1,122 @@
+﻿@model IEnumerable<ClinicaDemo.Models.Cita>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@if (TempData["AlertMessage"] != null)
+{
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Swal.fire({
+                title: '¡Éxito!',
+                text: '@TempData["AlertMessage"]',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+    </script>
+}
+
+<p>
+    <a onclick="showInPopup('@Url.Action("Create", "Citas", new { id = 0 }, Context.Request.Scheme)' ,
+    '')" class="btn btn-sm btn-primary text-white"><i class="oi oi-plus"></i> Agregar una cita</a>
+    <a class="btn btn-sm btn-success" asp-controller="Citas" asp-action="Calendar">
+        <i class="oi oi-calendar"></i> Calendario
+    </a>
+</p>
+
+<div class=" col-md-12">
+    <div class=" card">
+        <div class=" card-header text-center">
+            <h5>Lista de Citas</h5>
+        </div>
+        <div class=" card-body">
+            <table id="evento" class="table table-hover table responsive table stripped">
+                <thead>
+                    <tr>
+                        <th>
+                           Paciente
+                        </th>
+                        <th>
+                            Doctor
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Motivo)
+                        </th>
+                        <th>
+                            Fecha
+                        </th>
+                        <th>
+                            Hora
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="text-success">
+                                <strong>
+                                    @Html.DisplayFor(modelItem => item.Paciente!.FullName)
+                                </strong>
+                            </td>
+                            <td class="text-primary">
+                                <strong>
+                                    @Html.DisplayFor(modelItem => item.Medico!.FullName)
+                                </strong>                                
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Motivo)
+                            </td>
+                            <td>@item.FechaCita.ToString("yyyy-MM-dd")</td>
+                            <td>@item.HoraCita.ToString("HH:mm")</td>
+                            <td>
+                                <a onclick="showInPopup('@Url.Action("Pagar", "Citas", new { id = item.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-success btn-sm"><i class="oi oi-dollar"></i> </a>
+                                <a onclick="showInPopup('@Url.Action("Edit", "Citas", new { id = item.Id }, Context.Request.Scheme)' ,
+                    '')" class="btn btn-outline-warning btn-sm"><i class="oi oi-pencil"></i> </a>                               
+                                <button data-id="@item.Id" class="btn btn-outline-danger btn-sm deleteItem" data-bs-toggle="modal"
+                                        data-bs-target="#deleteDialog">
+                                    <i class="oi oi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+<partial name="_MostrarModal" />
+<partial name="_ModalEliminar" />
+
+@section Scripts {
+
+    <script src="~/js/showmodal.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#evento').DataTable(
+                {
+                    "language": {
+                        url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+                    },
+                });
+        });
+    </script>
+
+    <script>
+        sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/Citas/Delete/', false);
+    </script>
+}
+

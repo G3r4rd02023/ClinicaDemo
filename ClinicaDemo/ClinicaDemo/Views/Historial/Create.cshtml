@@ -1,0 +1,39 @@
+﻿@model ClinicaDemo.Models.HistorialClinico
+
+@{
+    ViewData["Title"] = "Crear Historial Clínico";
+    Layout = null;
+}
+
+<h5 class=" text-center text-primary">@ViewData["Title"]</h5>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="Paciente" /> 
+    <input type="hidden" asp-for="Paciente!.Id" />
+   
+    
+    <div class="form-group">       
+        <input asp-for="Diagnostico" class="form-control" placeholder="Diagnostico"/>
+        <span asp-validation-for="Diagnostico" class="text-danger"></span>
+    </div>
+    <div class="form-group">      
+        <input asp-for="Tratamiento" class="form-control" placeholder="Tratamiento"/>
+        <span asp-validation-for="Tratamiento" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input asp-for="Notas" class="form-control" placeholder="Notas"/>
+        <span asp-validation-for="Notas" class="text-danger"></span>
+    </div>
+    <div class="card-footer text-center">
+        <div class="form-group">
+            <button type="submit" class="btn btn-sm btn-success"><i class="oi oi-circle-check"></i> Guardar</button>
+            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal"><i class="oi oi-ban"></i> Cancelar</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
